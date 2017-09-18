@@ -1,6 +1,6 @@
 
 
-import numpy, myinterface, time
+import numpy, myinterface, time, sys
 
 N = 1024*1024*4*4
 vecs = numpy.arange((N*3), dtype=float).reshape((N,3))
@@ -27,4 +27,44 @@ start = time.clock()
 for i in range(1000):
     myinterface.py_vnorm( vecs[:1], mods[:1] )
 print "Print, us per call for 1 value",(time.clock()-start)*1000
+
+
+
+try:
+    import pyopencl
+except:
+    print "You dont have pyopencl, so skipping that"
+    sys.exit()
+
+newmods = numpy.zeros( mods.shape, mods.dtype )
+    
+ctx = pyopencl.create_some_context()
+queue = pyopencl.CommandQueue( ctx )
+
+mf = pyopencl.mem_flags
+
+start = time.time()
+
+v_g = pyopencl.Buffer( ctx, mf.READ_ONLY | mf.COPY_HOST_PTR ,
+                       vecs.nbytes , 
+                       hostbuf = vecs )
+
+m_g = pyopencl.Buffer( ctx, mf.WRITE_ONLY , newmods.nbytes )
+
+
+
+prg = pyopencl.Program( ctx,
+                  open( "my_cl_code.cl", "r" ).read()
+                  ).build()
+
+setuptime = time.time()-start
+
+start = time.time()
+prg.vnorm( queue, (N,), None, v_g, m_g )
+
+pyopencl.enqueue_read_buffer( queue, m_g, newmods).wait()
+runtime = time.time()- start
+
+if (newmods - mods).max() == 0:
+    print "opencl seemed to work", setuptime, runtime
 
