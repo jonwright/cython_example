@@ -20,7 +20,7 @@ else:
     ela = ["-lgomp",]
 
 
-sourcefiles = [ 'myinterface.pyx',
+sourcefiles = [ 'myinterface'+extn,
                 'my_c_code.c' ]
 
 extensions = [ Extension("myinterface", sourcefiles,
