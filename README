@@ -1,0 +1,11 @@
+
+A minimal example for calling a C function via cython.
+
+Build an example C program using the Makefile
+
+Otherwise:
+ python setupy.py build_ext --inplace
+ python test_cython_interface.py
+
+
+
