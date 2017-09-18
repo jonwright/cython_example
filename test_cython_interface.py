@@ -8,7 +8,8 @@ mods = numpy.ones(N, float)
 print "Memory increment",(mods.nbytes+vecs.nbytes)/1024,"K"
 start = time.time()
 myinterface.py_vnorm( vecs, mods )
-print time.time()-start
+diff = time.time()-start
+print diff,"/s",(mods.nbytes+vecs.nbytes)/1024/1024/diff,"MB/s"
 print "Works? :",numpy.allclose( numpy.sqrt((vecs*vecs).sum(axis=1)), mods )
 
 
