@@ -1,4 +1,10 @@
 
+#
+#  Build with intel linux compiler
+#
+#  source /opt/intel/parallel_studio_xe_2018/psxevars.sh
+#  LDSHARED="icc -fast -shared" CC="icc -fast" python setup.py build_ext --inplace --force
+#  ... otherwise gcc is used
 
 
 from distutils.core import setup
@@ -17,7 +23,7 @@ if sys.platform.find("win32")==0: # Wrong - should check compiler
     ela = []
 else:
     eca = ["-fopenmp",]
-    ela = ["-lgomp",]
+    ela = ["-fopenmp"]
 
 
 sourcefiles = [ 'myinterface'+extn,
