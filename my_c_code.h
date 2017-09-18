@@ -1,4 +1,6 @@
 
-void vnorm(double[][3], double[], int n);
+typedef double vec[3];
+void vnorm(vec[], double[], int n);
+
 
 
