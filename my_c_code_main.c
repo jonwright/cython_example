@@ -6,7 +6,7 @@
 #define N 10
 
 int main(){
-    double vecs[N][3];
+    vec    vecs[N];
     double mods[N];
     int i,j;
     for(i=0;i<N;i++){ 
