@@ -1,7 +1,7 @@
 
 
 
-from distutils.core import setup
+from setuptools import setup
 from distutils.extension import Extension
 from Cython.Build import cythonize
 import numpy, sys
@@ -31,5 +31,8 @@ extensions = [ Extension("myinterface", sourcefiles,
     ]
 
 setup(
-    ext_modules = cythonize( extensions )
+    ext_modules = cythonize( extensions ),
+    cffi_modules = ["build_my_c_code.py:ffibuilder"],
+    install_requires=["cffi>=1.0.0"],
+    setup_requires=["cffi>=1.0.0"],
 )
