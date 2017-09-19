@@ -41,6 +41,7 @@ try:
 except:
     print ("You dont have pyopencl, so skipping that")
     raise
+    sys.exit()
 
 newmods = numpy.zeros( mods.shape, mods.dtype )
     
@@ -76,5 +77,4 @@ runtime = time.time()- start
 
 if (newmods - mods).max() == 0:
     print( "opencl seemed to work", setuptime, runtime)
-
 
