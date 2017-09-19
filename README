@@ -4,8 +4,16 @@ A minimal example for calling a C function via cython.
 Build an example C program using the Makefile
 
 Otherwise:
- python setupy.py build_ext --inplace
+ python setup.py build_ext --inplace
  python test_cython_interface.py
+ python test_cffi_interface.py
+ python test_f2py_interface.py
+
+... conclusions ?
+ - cython looks good, but new language and heavy c output
+ - f2py appears to work fine. Only uses the C compiler for C.
+ - ffi worked but needed a python wrapper to do a cast + from_buffer
+ - opencl is clunky / slower due to copies
 
 
 

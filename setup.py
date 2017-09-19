@@ -3,8 +3,10 @@
 
 from setuptools import setup
 from distutils.extension import Extension
+
 from Cython.Build import cythonize
 import numpy, sys
+import numpy.distutils.core
 
 RUN_CYTHON=False
 if RUN_CYTHON:
@@ -23,15 +25,24 @@ else:
 sourcefiles = [ 'myinterface'+extn,
                 'my_c_code.c' ]
 
-extensions = [ Extension("myinterface", sourcefiles,
-       include_dirs=[ numpy.get_include(),],
-       extra_compile_args=eca,
-       extra_link_args=ela,
-       )
+extensions = [ 
+        # Cython
+        Extension("myinterface", sourcefiles,
+           include_dirs=[ numpy.get_include(),],
+           extra_compile_args=eca,
+           extra_link_args=ela,
+           ),
     ]
 
-setup(
-    ext_modules = cythonize( extensions ),
+f2pyext = numpy.distutils.core.Extension("f2py_vnorm",
+        sources = ["interface_f2py.pyf", "my_c_code.c"],
+        include_dirs=[ numpy.get_include(),],
+        extra_compile_args=eca,
+        extra_link_args=ela)
+
+
+numpy.distutils.core.setup(
+    ext_modules = cythonize( extensions ) + [f2pyext,] ,
     cffi_modules = ["build_my_c_code.py:ffibuilder"],
     install_requires=["cffi>=1.0.0"],
     setup_requires=["cffi>=1.0.0"],

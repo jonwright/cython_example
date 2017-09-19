@@ -1,0 +1,15 @@
+
+python module f2py_vnorm
+interface
+subroutine vnorm( vecs, mods, n)
+    intent(c) vnorm
+    intent(c)
+    integer intent(hide), depend(mods) :: n
+    double precision intent(in) :: vecs(n,3)
+    double precision intent(inout) :: mods(n)
+end subroutine vnorm
+
+end interface
+end python module f2py_vnorm
+
+
