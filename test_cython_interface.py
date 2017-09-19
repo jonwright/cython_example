@@ -1,39 +1,40 @@
 
+from __future__ import print_function
 
 import numpy, myinterface, time, sys
 
 N = 1024*1024*4*4
 vecs = numpy.arange((N*3), dtype=float).reshape((N,3))
 mods = numpy.ones(N, float)
-print "Memory increment",(mods.nbytes+vecs.nbytes)/1024,"K"
+print ("Memory increment",(mods.nbytes+vecs.nbytes)/1024,"K")
 start = time.time()
 myinterface.py_vnorm( vecs, mods )
 diff = time.time()-start
-print diff,"/s",(mods.nbytes+vecs.nbytes)/1024/1024/diff,"MB/s"
-print "Works? :",numpy.allclose( numpy.sqrt((vecs*vecs).sum(axis=1)), mods )
+print (diff,"/s",(mods.nbytes+vecs.nbytes)/1024/1024/diff,"MB/s")
+print ("Works? :",numpy.allclose( numpy.sqrt((vecs*vecs).sum(axis=1)), mods ))
 
 
 try:
     myinterface.py_vnorm( vecs[::2], mods[::2] )
 except ValueError:
-    print "Catches non-contiguous"
+    print( "Catches non-contiguous")
 
 try:
     myinterface.py_vnorm( vecs.T, mods[::2] )
 except ValueError:
-    print "Catches transpose"
+    print( "Catches transpose")
 
 start = time.clock()
 for i in range(1000):
     myinterface.py_vnorm( vecs[:1], mods[:1] )
-print "Print, us per call for 1 value",(time.clock()-start)*1000
+print ("Print, us per call for 1 value",(time.clock()-start)*1000)
 
 
 
 try:
     import pyopencl
 except:
-    print "You dont have pyopencl, so skipping that"
+    print ("You dont have pyopencl, so skipping that")
     sys.exit()
 
 newmods = numpy.zeros( mods.shape, mods.dtype )
@@ -66,5 +67,5 @@ pyopencl.enqueue_read_buffer( queue, m_g, newmods).wait()
 runtime = time.time()- start
 
 if (newmods - mods).max() == 0:
-    print "opencl seemed to work", setuptime, runtime
+    print( "opencl seemed to work", setuptime, runtime)
 
